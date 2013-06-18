@@ -6,7 +6,7 @@ require 'geocoder'
 ingredient_by_month = {'June' => {'California'=> ['apricots', 'arugula']}}
 
 get '/' do 
-	state = r.request.location.state.to_s
+	state = request.location.state
 	month = Date::MONTHNAMES[Date.today.month]
 	ingredient_by_month[month][state].join(", ")
 end
