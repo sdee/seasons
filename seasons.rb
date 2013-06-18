@@ -11,5 +11,5 @@ get '/' do
 	state = r.state
 	month = Date::MONTHNAMES[Date.today.month]
 	ingredient_by_month[month]['San Francisco'].join(", ")
-	# request.location
+	request.location
 end
