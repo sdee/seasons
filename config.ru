@@ -1,2 +1,2 @@
-require '.seasons'
+require './seasons'
 run Sinatra::Application
