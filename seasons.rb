@@ -1,5 +1,6 @@
 require 'sinatra'
-require 'Geocoder'
+require 'geocoder'
+
 
 # Apricots, Arugula, Beets, Cherries , Garlic, Greens, Herbs, Lettuce, Onions , Peas, Radishes, Salad Greens, Spinach, Summer squash
 ingredient_by_month = {'June' => {'San Francisco'=> ['apricots', 'arugula']}}
