@@ -39,6 +39,10 @@ require_relative "flickr"
 
 		month_info = ingredient_by_month_and_state[key]
 
+		puts "State: "+@state
+		puts "Key: "+key
+
+
 		if month_info.has_key?(@state)
 			@ingredients = month_info[@state].join(", ")
 		elsif month_info.has_key?(@state+" (Northern)")
@@ -47,6 +51,8 @@ require_relative "flickr"
 			@ingredients = "sorry no info"
 		end
 		
+				puts "Ingredients: "+@ingredients
+
 		#puts flickr_ingred_photo('arugula')
 		erb :index
 	end
