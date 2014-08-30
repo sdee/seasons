@@ -4,10 +4,6 @@ require 'geocoder'
 require 'json'
 require 'Date'
 
-require_relative "flickr"
-
-# include HTTParty
-
 # ingredient_by_month_and_state = {'July' =>
 # 								{'California' => ['Fennel' , 'Figs', 'Garlic', 'Green Garlic' , 'Herbs', 'Horseradish', 'Kale' , 'Kohlrabi', 'Leeks', 'Lemons', 'Lettuces' , 'Loquats', 'Melons', 'Mushrooms' , 'Mustard Greens', 'Nectarines', 'Nettles' , 'Okra', 'Olives', 'Onions', 'Oranges', 'Peaches', 'Peas', 'Peppers', 'Pistachioes', 'Plums', 'Pluots', 'Purslane' , 'Radicchio', 'Radish' , 'Rapini' , 'Raspberries', 'Rhubarb', 'Scallions', 'Shallots', 'Spinach', 'Strawberries',
 # 									'Summer squash', 'Tayberries', 'Tomatillos', 'Tomatoes', 'Walnuts'],
@@ -15,12 +11,6 @@ require_relative "flickr"
 # 								}
 
 ingredient_by_month_and_state = JSON.parse(IO.read("./seasons.json"))
-
-helpers do
-	def test
-		Flickr.flickr_ingred_photo('arugula')
-	end
-end
 
 def get_state (ip)
 	@state = ip == '127.0.0.1' ? 'California' : @state = request.location.state #based on IP, via geocoder
@@ -84,7 +74,5 @@ end
 get '/' do
 	state = get_state(request.ip.to_s)
 	timing, month, earlylate = get_timing
-	# @ingredients = get_seasonal_ingredients(@timing, @state, ingredient_by_month_and_state)
-	# erb :index
 	redirect to('/'+state+'/'+month+'/'+earlylate)
 end
