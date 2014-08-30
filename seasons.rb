@@ -19,38 +19,56 @@ require_relative "flickr"
 		def test
 			Flickr.flickr_ingred_photo('arugula')
 		end
-
 	end
 
-	get '/' do
-		if request.ip.to_s == '127.0.0.1'
+	def get_state (ip)
+		if ip == '127.0.0.1'
 			@state = 'California'
 		else
 			@state = request.location.state #based on IP, via geocoder
 		end
-		@month = Date::MONTHNAMES[Date.today.month] #month name
+		return @state
+	end
+
+	def get_timing ()
+		month = Date::MONTHNAMES[Date.today.month] #month name
 		day = Date.today.day
 		if day >15
 			timing = "late"
 		else
 			timing = "early"
 		end
-		key = @month+'-'+timing
+		timing = month+'-'+timing
+		return timing, month
+	end
 
-		month_info = ingredient_by_month_and_state[key]
-
-		puts "State: "+@state
-		puts "Key: "+key
-
-		if month_info.has_key?(@state)
-			@ingredients = month_info[@state].join(", ")
-		elsif month_info.has_key?(@state+" (Northern)")
-			@ingredients = month_info[@state+" (Northern)"].join(", ")
+	def get_seasonal_ingredients(timing, state, ingredient_by_month_and_state)
+		month_info = ingredient_by_month_and_state[timing]
+		if month_info.has_key?(state)
+			ingredients = month_info[state]
+		#default to northern for states with northern and southern
+		elsif month_info.has_key?(state+" (Northern)")
+			ingredients = month_info[state+" (Northern)"]
 		else
-			@ingredients = "sorry no info"
+			ingredients = "sorry no info"
 		end
+		ingredients.join(", ")
+	end
 
-		puts "Ingredients: "+@ingredients
+get '/:state/:month' do
+  # matches "GET /hello/foo" and "GET /hello/bar"
+  # params[:name] is 'foo' or 'bar'
+	@state = params[:state]
+	@month = params[:month]
+	@timing = @month+'-'+"early"
 
+	@ingredients = get_seasonal_ingredients(@timing, @state, ingredient_by_month_and_state)
+	erb :index
+end
+
+	get '/' do
+		@state = get_state(request.ip.to_s)
+		@timing, @month = get_timing
+		@ingredients = get_seasonal_ingredients(@timing, @state, ingredient_by_month_and_state)
 		erb :index
 	end
