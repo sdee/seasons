@@ -30,7 +30,7 @@ def get_timing
 	month = Date::MONTHNAMES[Date.today.month] #month name
 	day = Date.today.day
 	earlylate = day > 15 ? "Late" : "Early"
-	timing = month+'-'+earlylate
+	timing = partofmonth(month, earlylate)
 	return timing, month, earlylate
 end
 
