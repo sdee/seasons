@@ -52,6 +52,7 @@ def get_seasonal_ingredients (timing, state, ingred_map)
 	else
 		ingredients = "sorry no info"
 	end
+	ingredients.join(", ")
 end
 
 #Routes with most specific first
