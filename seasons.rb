@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'geocoder'
 require 'json'
+require 'Date'
 
 require_relative "flickr"
 
@@ -22,27 +23,18 @@ helpers do
 end
 
 def get_state (ip)
-	if ip == '127.0.0.1'
-		@state = 'California'
-	else
-		@state = request.location.state #based on IP, via geocoder
-	end
-	return @state
+	@state = ip == '127.0.0.1' ? 'California' : @state = request.location.state #based on IP, via geocoder
 end
 
 def get_timing ()
 	month = Date::MONTHNAMES[Date.today.month] #month name
 	day = Date.today.day
-	if day >15
-		timing = "late"
-	else
-		timing = "early"
-	end
+	timing = day > 15 ? "late" : "early"
 	timing = month+'-'+timing
 	return timing, month
 end
 
-def get_seasonal_ingredients(timing, state, ingredient_by_month_and_state)
+def get_seasonal_ingredients (timing, state, ingredient_by_month_and_state)
 	month_info = ingredient_by_month_and_state[timing]
 	if month_info.has_key?(state)
 		ingredients = month_info[state]
