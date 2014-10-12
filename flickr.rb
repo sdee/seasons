@@ -1,18 +1,24 @@
-require 'httparty'
+require 'flickraw'
+require "sinatra/config_file"
+
 class Flickr
-  include HTTParty
 
-	base_uri 'http://api.flickr.com'
-	API_KEY = '17099a6369aa0e382f89766135fb1430'
-	def self.flickr_ingred_photo(ingred_name)
+  def initialize(api_key, secret)
+    FlickRaw.api_key=api_key
+    FlickRaw.shared_secret=secret
+  end
 
-	# http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=17099a6369aa0e382f89766135fb1430&tags=arugula&format=rest
-		get("/services/rest/",
-			:query => {
-				:method => "flickr.photos.search",
-				:api_key => "17099a6369aa0e382f89766135fb1430",
-				:tags => ingred_name
-			}
-		)
-	end
+  def top_image(ingredient)
+    puts "ingred! "+ingredient
+    args = {}
+    args['text'] = ingredient+' farmers market'
+    photos = flickr.photos.search args
+    print photos
+    FlickRaw.url photos[0]
+  end
+
+  def discover(ingredients)
+    ingredients.sample(9).map{|i| [i, top_image(i)]}
+  end
+
 end

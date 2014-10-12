@@ -20,7 +20,6 @@ class SeasonalIngredients
   def for_month_and_state (timing, state)
     ingreds_by_state = ingred_map[timing] || ingred_map[early(timing)] || {}
     ingredients = ingreds_by_state[state] || ingreds_by_state[north(state)] || ["sorry no info"]
-    ingredients.join(", ")
   end
 
   def early (month)
